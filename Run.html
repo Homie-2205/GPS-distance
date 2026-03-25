@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run Tracker Pro</title>
+    <style>
+        :root { --accent: #00ff88; --bg: #1a1a1a; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: var(--bg); color: white; 
+            margin: 0; display: flex; flex-direction: column; align-items: center; 
+            justify-content: center; height: 100vh; text-align: center;
+        }
+        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; width: 90%; }
+        .stat-box { background: #333; padding: 20px; border-radius: 15px; border-bottom: 4px solid var(--accent); }
+        .label { font-size: 0.8rem; color: #aaa; text-transform: uppercase; }
+        .value { font-size: 1.8rem; font-weight: bold; margin-top: 5px; }
+        #timer { font-size: 4rem; color: var(--accent); margin-bottom: 30px; font-variant-numeric: tabular-nums; }
+        .controls { display: flex; gap: 15px; }
+        button { 
+            padding: 18px 40px; font-size: 1.2rem; font-weight: bold; border: none; 
+            border-radius: 50px; cursor: pointer; transition: 0.2s; 
+        }
+        #startBtn { background: var(--accent); color: #111; }
+        #stopBtn { background: #ff4444; color: white; display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="timer">00:00:00</div>
+
+    <div class="stats">
+        <div class="stat-box">
+            <div class="label">Distance</div>
+            <div class="value"><span id="distVal">0.00</span> <small>km</small></div>
+        </div>
+        <div class="stat-box">
+            <div class="label">Status</div>
+            <div id="status" class="value" style="font-size: 1rem;">Ready</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="startBtn" onclick="startRun()">START RUN</button>
+        <button id="stopBtn" onclick="stopRun()">STOP</button>
+    </div>
+
+    <script>
+        let timerInterval, watchId;
+        let startTime, totalDistance = 0, lastCoords = null;
+
+        const timerDisplay = document.getElementById('timer');
+        const distDisplay = document.getElementById('distVal');
+        const statusDisplay = document.getElementById('status');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+
+        // Haversine formula to calculate distance between two GPS points
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Earth radius in km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2)**2 + Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) * Math.sin(dLon/2)**2;
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+
+        function updateTimer() {
+            const now = Date.now();
+            const diff = new Date(now - startTime);
+            const h = String(Math.floor((now - startTime) / 3600000)).padStart(2, '0');
+            const m = String(diff.getUTCMinutes()).padStart(2, '0');
+            const s = String(diff.getUTCSeconds()).padStart(2, '0');
+            timerDisplay.textContent = `${h}:${m}:${s}`;
+        }
+
+        function startRun() {
+            if (!navigator.geolocation) {
+                alert("GPS not supported on this device.");
+                return;
+            }
+
+            startTime = Date.now();
+            totalDistance = 0;
+            lastCoords = null;
+            
+            // UI Update
+            startBtn.style.display = 'none';
+            stopBtn.style.display = 'block';
+            statusDisplay.textContent = "Tracking...";
+
+            // Start Clock
+            timerInterval = setInterval(updateTimer, 1000);
+
+            // Start GPS Tracking
+            watchId = navigator.geolocation.watchPosition(
+                (pos) => {
+                    const { latitude, longitude, accuracy } = pos.coords;
+                    // Ignore low accuracy points (> 30m error)
+                    if (accuracy > 30) return; 
+
+                    if (lastCoords) {
+                        const d = getDistance(lastCoords.lat, lastCoords.lng, latitude, longitude);
+                        totalDistance += d;
+                        distDisplay.textContent = totalDistance.toFixed(2);
+                    }
+                    lastCoords = { lat: latitude, lng: longitude };
+                },
+                (err) => { statusDisplay.textContent = "GPS Error"; },
+                { enableHighAccuracy: true, maximumAge: 1000 }
+            );
+        }
+
+        function stopRun() {
+            clearInterval(timerInterval);
+            navigator.geolocation.clearWatch(watchId);
+            startBtn.style.display = 'block';
+            stopBtn.style.display = 'none';
+            statusDisplay.textContent = "Finished";
+            
+            // Haptic feedback (vibration) for Android
+            if (window.navigator.vibrate) window.navigator.vibrate(200);
+        }
+    </script>
+</body>
+</html>
+
