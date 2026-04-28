@@ -116,56 +116,53 @@
         <!-- Main Content -->
         <div class="main-content">
             <h2>Explore the Beauty of Nature</h2>
-          <html>
+            
+     
+    </style>
+  </head>
+  <body>
+<div><!DOCTYPE html>
+<html>
   <head>
-    <title>Simple Google Map</title>
+    <title>Simple Map</title>
     <style>
-      /* Step 1: Set the map height explicitly */
+      /* Always set a height for the map container */
       #map {
-        height: 400px;
+        height: 500px;
         width: 100%;
-      }
-      /* Optional: Basic page styling */
-      body {
-        margin: 0;
-        font-family: sans-serif;
-        padding: 20px;
       }
     </style>
   </head>
   <body>
     <h3>My Google Map</h3>
-    
-    <!-- Step 2: Create a div for the map -->
+    <!-- The element where the map will appear -->
     <div id="map"></div>
 
-    <!-- Step 3: JavaScript to initialize the map -->
     <script>
-      function initMap() {
-        // Set coordinates (Latitude/Longitude)
-        const myLocation = { lat: 40.7128, lng: -74.0060 }; // New York City
-        
-        // Create the map object
-        const map = new google.maps.Map(document.getElementById("map"), {
-          zoom: 10,
-          center: myLocation,
-        });
+      (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t.toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}://apis.com?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Better to use importLibrary() directly."):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+        key: "AIzaSyBysW5JlF4CHkoLItJlU1R3nfJ8KT_CV7g", // <--- PASTE YOUR KEY HERE
+        v: "weekly",
+      });
 
-        // Optional: Add a marker
-        const marker = new google.maps.Marker({
-          position: myLocation,
-          map: map,
-          title: "Hello NYC!"
+      let map;
+
+      async function initMap() {
+        const { Map } = await google.maps.importLibrary("maps");
+
+        map = new Map(document.getElementById("map"), {
+          center: { lat: -34.397, lng: 150.644 }, // Latitude and Longitude
+          zoom: 8,
         });
       }
-    </script>
 
-    <!-- Step 4: Load the Google Maps API -->
-    <!-- Replace YOUR_API_KEY with your actual key -->
-    <script src="AIzaSyBysW5JlF4CHkoLItJlU1R3nfJ8KT_CV7g" async defer></script>
+      initMap();
+    </script>
   </body>
 </html>
-            <p>
+</div>
+      
+    <h3>My Google Map</h3>
+    
                 This main division contains the primary information for your users. We used a CSS Grid to ensure that the layout remains flexible. You can add more headings, paragraphs, and high-quality images here to tell your story.
             </p>
             <p>
