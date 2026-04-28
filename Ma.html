@@ -116,7 +116,55 @@
         <!-- Main Content -->
         <div class="main-content">
             <h2>Explore the Beauty of Nature</h2>
-            <img src="tortuga.jpg" alt="Nature Image" class="content-img">
+          <html>
+  <head>
+    <title>Simple Google Map</title>
+    <style>
+      /* Step 1: Set the map height explicitly */
+      #map {
+        height: 400px;
+        width: 100%;
+      }
+      /* Optional: Basic page styling */
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h3>My Google Map</h3>
+    
+    <!-- Step 2: Create a div for the map -->
+    <div id="map"></div>
+
+    <!-- Step 3: JavaScript to initialize the map -->
+    <script>
+      function initMap() {
+        // Set coordinates (Latitude/Longitude)
+        const myLocation = { lat: 40.7128, lng: -74.0060 }; // New York City
+        
+        // Create the map object
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 10,
+          center: myLocation,
+        });
+
+        // Optional: Add a marker
+        const marker = new google.maps.Marker({
+          position: myLocation,
+          map: map,
+          title: "Hello NYC!"
+        });
+      }
+    </script>
+
+    <!-- Step 4: Load the Google Maps API -->
+    <!-- Replace YOUR_API_KEY with your actual key -->
+    <script src="AIzaSyBFGx-grf2-L8ahjQHOmmyW6_7guqOHaMI" async defer></script>
+  </body>
+</html>
             <p>
                 This main division contains the primary information for your users. We used a CSS Grid to ensure that the layout remains flexible. You can add more headings, paragraphs, and high-quality images here to tell your story.
             </p>
