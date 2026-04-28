@@ -124,24 +124,68 @@
                 Modern web design often uses plenty of "white space" to help the user focus on what matters most. By keeping things clean, your message stands out.
             </p>
         </div>
-        <div>
-<style>
-      <html,
-      body {
-        height:100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
+  
   </head>
-  <body>
-    <gmp-map-3d mode="hybrid" center="37.841157, -122.551679" range="2000" tilt="75" heading="330"></gmp-map-3d>
-    <script async src="https://maps.googleapis.com/maps/api/js?key=<AIzaSyAEDdDRklQ6riF38Uk0Ym9R15-10Ga2Dp0"></script>
-  </body>
+ 
 
             
         </div>
 
+      <style>
+      /* Step 1: Set the map height explicitly */
+      #map {
+        height: 400px;
+        width: 100%;
+      }
+      /* Optional: Basic page styling */
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        padding: 20px;
+      }
+    </style>
+
+  <body>
+    <h3>My Google Map</h3>
+    
+    <!-- Step 2: Create a div for the map -->
+    <div id="map"></div>
+
+    <!-- Step 3: JavaScript to initialize the map -->
+    <script>
+      function initMap() {
+        // Set coordinates (Latitude/Longitude)
+        const myLocation = { lat: 40.7128, lng: -74.0060 }; // New York City
+        
+        // Create the map object
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 10,
+          center: myLocation,
+        });
+
+        // Optional: Add a marker
+        const marker = new google.maps.Marker({
+          position: myLocation,
+          map: map,
+          title: "Hello NYC!"
+        });
+      }
+    </script>
+
+    <!-- Step 4: Load the Google Maps API -->
+    <!-- Replace YOUR_API_KEY with your actual key -->
+    <script src="AIzaSyAEDdDRklQ6riF38Uk0Ym9R15-10Ga2Dp0" async defer></script>
+  </body>
+
+
+
+
+  
+
+
+
+    
+</div>
         <!-- Sidebar -->
         <div class="sidebar">
             <h3>Quick Info</h3>
