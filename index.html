@@ -140,7 +140,26 @@
 
     <h3>Map Search Example</h3>
   
-    <script src="AIzaSyChoTaqOgy09C14PGmgmaiTG_yP4DTRUGA" async defer></script>
+    <script> // Example: Calling a Google API using fetch and an API Key
+const API_KEY = 'AIzaSyChoTaqOgy09C14PGmgmaiTG_yP4DTRUGA';
+const url = `https://googleapis.com{AIzaSyChoTaqOgy09C14PGmgmaiTG_yP4DTRUGA}`;
+
+const data = {
+  document: {
+    content: "Google is a great company.",
+    type: "PLAIN_TEXT"
+  }
+};
+
+async function callGoogleAPI() {
+  const response = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(data)
+  });
+  const result = await response.json();
+  console.log(result);
+}
+</script>
 
 
 
