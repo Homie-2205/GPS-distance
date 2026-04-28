@@ -125,56 +125,56 @@
             </p>
         </div>
   
-  </head>
+
  
 
             
         </div>
 
-      <style>
-      /* Step 1: Set the map height explicitly */
-      #map {
-        height: 400px;
-        width: 100%;
-      }
-      /* Optional: Basic page styling */
-      body {
-        margin: 0;
-        font-family: sans-serif;
-        padding: 20px;
-      }
+
+<div>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Google Maps & Places API</title>
+    <style>
+      #map { height: 500px; width: 100%; }
+      body { font-family: Arial, sans-serif; margin: 20px; }
     </style>
-
+  </head>
   <body>
-    <h3>My Google Map</h3>
-    
-    <!-- Step 2: Create a div for the map -->
+    <h3>Map Search Example</h3>
     <div id="map"></div>
-
-    <!-- Step 3: JavaScript to initialize the map -->
     <script>
-      function initMap() {
-        // Set coordinates (Latitude/Longitude)
-        const myLocation = { lat: 40.7128, lng: -74.0060 }; // New York City
-        
-        // Create the map object
-        const map = new google.maps.Map(document.getElementById("map"), {
-          zoom: 10,
-          center: myLocation,
-        });
-
-        // Optional: Add a marker
-        const marker = new google.maps.Marker({
-          position: myLocation,
-          map: map,
-          title: "Hello NYC!"
+      let map;
+      async function initMap() {
+        const center = { lat: -33.867, lng: 151.195 };
+        map = new google.maps.Map(document.getElementById("map"), { center, zoom: 15 });
+        const request = { query: "Museum of Contemporary Art Australia", fields: ["name", "geometry"] };
+        new google.maps.places.PlacesService(map).findPlaceFromQuery(request, (results, status) => {
+          if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+            new google.maps.Marker({ map, position: results[0].geometry.location });
+            map.setCenter(results[0].geometry.location);
+          }
         });
       }
     </script>
+    <script src="https://googleapis.com" async defer></script>
+  </body>
+</html>
+
+
+
+    
+</div>
+    
+     
+
+   
 
     <!-- Step 4: Load the Google Maps API -->
     <!-- Replace YOUR_API_KEY with your actual key -->
-    <script src="AIzaSyChoTaqOgy09C14PGmgmaiTG_yP4DTRUGA" async defer></script>
+    
   </body>
 
 
