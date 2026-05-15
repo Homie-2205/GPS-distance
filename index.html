@@ -1,1 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Google Sheet Rows</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        .search-box { margin-bottom: 20px; }
+        input { padding: 8px; width: 250px; }
+        button { padding: 8px 15px; cursor: pointer; }
+        #data-container { margin-top: 20px; padding: 15px; border: 1px solid #ccc; max-width: 400px; }
+    </style>
+</head>
+<body>
 
+    <h1>Database Search</h1>
+    
+    <div class="search-box">
+        <!-- Single input element for both rows and names -->
+        <input type="text" id="searchInput" placeholder="Enter row number OR name...">
+        <button onclick="executeSearch()">Search</button>
+    </div>
+
+    <div id="data-container">Results will appear here...</div>
+
+    <script>
+        // Replace with your freshly deployed Google Apps Script Web App URL
+        const baseApiUrl = 'https://script.google.com/macros/s/AKfycbzbD4jGSAoeoonu8wAacoLCISzryTmjTWRyzf5jFOIm_-GzEDuIN5rolFOcTxYqTRbL/exec'; 
+
+        async function executeSearch() {
+            const inputVal = document.getElementById('searchInput').value.trim();
+            const container = document.getElementById('data-container');
+            
+            if (!inputVal) {
+                container.innerText = "Please enter a value to search.";
+                return;
+            }
+
+            container.innerText = "Searching...";
+            let finalUrl = baseApiUrl;
+
+            // If input is purely a number, append row parameter. Otherwise, append search parameter.
+            if (!isNaN(inputVal)) {
+                finalUrl += `?row=${inputVal}`;
+            } else {
+                finalUrl += `?search=${encodeURIComponent(inputVal)}`;
+            }
+
+            try {
+                const response = await fetch(finalUrl);
+                const data = await response.json();
+                
+                if (data.error) {
+                    container.innerText = data.error;
+                    return;
+                }
+
+                // Render matching data rows
+                let htmlContent = '<h3>Match Found:</h3><ul>';
+                for (const [key, value] of Object.entries(data)) {
+                    htmlContent += `<li><strong>${key}:</strong> ${value}</li>`;
+                }
+                htmlContent += '</ul>';
+
+                container.innerHTML = htmlContent;
+            } catch (error) {
+                container.innerText = 'Error connection to database.';
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
